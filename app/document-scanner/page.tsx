@@ -13,82 +13,63 @@ export default function DocumentScannerPage() {
     setError(null)
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { 
-          facingMode: "environment", // محاولة فتح الكاميرا الخلفية
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        },
-        audio: false // تأكيد عدم طلب الميكروفون لتسهيل الإذن
+        video: { facingMode: "environment" }, // الكاميرا الخلفية
+        audio: false 
       })
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream
-        // ننتظر حتى يتم تحميل البيانات الوصفية للفيديو قبل البدء
-        videoRef.current.onloadedmetadata = () => {
-          videoRef.current?.play()
-          setIsActive(true)
-        }
+        // هذه الخاصية تمنع الفيديو من أخذ الشاشة كاملة في الآيفون
+        videoRef.current.setAttribute("playsinline", "true");
+        videoRef.current.play();
+        setIsActive(true);
       }
     } catch (err: any) {
-      console.error("Camera Error:", err)
-      if (err.name === 'NotAllowedError') {
-        setError("تم رفض الوصول للكاميرا. يرجى تفعيلها من إعدادات المتصفح.")
-      } else {
-        setError("تعذر فتح الكاميرا. قد تكون مستخدمة من تطبيق آخر أو غير مدعومة.")
-      }
+      setError("يرجى تفعيل صلاحية الكاميرا");
     }
   }
 
-  // تنظيف الكاميرا عند إغلاق الصفحة (مهم جداً للمتصفحات)
-  useEffect(() => {
-    return () => {
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject as MediaStream
-        const tracks = stream.getTracks()
-        tracks.forEach(track => track.stop())
-      }
-    }
-  }, [])
-
   return (
-    <DashboardLayout title="ماسح المستندات" description="استخدم الكاميرا لمسح وحفظ المستندات">
-      <div className="max-w-2xl mx-auto flex flex-col items-center gap-6">
+    <DashboardLayout title="ماسح المستندات" description="تصوير المستندات داخل الإطار">
+      <div className="max-w-md mx-auto flex flex-col items-center gap-6 px-4">
         
-        {error && (
-          <div className="w-full p-4 bg-red-50 border border-red-200 text-red-700 rounded-2xl flex items-center gap-2">
-            <AlertCircle size={20} />
-            <p className="text-sm font-medium">{error}</p>
-          </div>
-        )}
-
-        <div className="w-full aspect-[4/3] bg-slate-900 rounded-3xl border-8 border-teal-500/10 overflow-hidden relative shadow-2xl">
+        {/* الحاوية المقيدة - لن تخرج الكاميرا عن هذا المربع */}
+        <div className="relative w-full aspect-[3/4] bg-slate-900 rounded-[2.5rem] border-8 border-white shadow-2xl overflow-hidden ring-1 ring-slate-200">
           {!isActive && (
-            <div className="absolute inset-0 flex items-center justify-center text-teal-500/30">
-              <Camera size={80} />
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-white/20 gap-3">
+              <Camera size={48} />
+              <p className="text-xs font-bold">بانتظار تشغيل الكاميرا</p>
             </div>
           )}
-          {/* أضفنا muted و playsInline بشكل صريح */}
+          
           <video 
             ref={videoRef} 
             autoPlay 
-            playsInline 
             muted 
+            playsInline // أهم خاصية لمنع الـ Full Screen التلقائي
             className="w-full h-full object-cover" 
           />
+          
+          {/* إطار وهمي يوضح للمستخدم مكان وضع الورقة */}
+          {isActive && (
+            <div className="absolute inset-6 border-2 border-white/40 rounded-xl border-dashed pointer-events-none flex items-center justify-center">
+               <div className="w-full h-[1px] bg-white/10 animate-scan shadow-[0_0_15px_rgba(255,255,255,0.5)]"></div>
+            </div>
+          )}
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex gap-3 w-full">
           {!isActive ? (
-            <Button onClick={startCamera} className="bg-teal-600 hover:bg-teal-700 py-6 px-10 text-lg rounded-2xl gap-2">
-              <Camera className="w-5 h-5" /> فتح الكاميرا
+            <Button onClick={startCamera} className="flex-1 bg-black h-14 rounded-2xl text-lg font-black gap-2">
+              <Camera size={20} /> فتح الكاميرا
             </Button>
           ) : (
             <>
-              <Button onClick={() => window.print()} className="bg-teal-600 hover:bg-teal-700 py-6 px-10 text-lg rounded-2xl gap-2">
-                <FileText className="w-5 h-5" /> تصوير وحفظ PDF
+              <Button onClick={() => window.print()} className="flex-1 bg-teal-600 h-14 rounded-2xl text-lg font-black gap-2">
+                <FileText size={20} /> حفظ PDF
               </Button>
-              <Button variant="outline" onClick={() => window.location.reload()} className="py-6 px-6 rounded-2xl">
-                <RefreshCw className="w-5 h-5" />
+              <Button variant="outline" onClick={() => window.location.reload()} className="h-14 w-14 rounded-2xl border-2">
+                <RefreshCw size={20} />
               </Button>
             </>
           )}
