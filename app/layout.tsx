@@ -17,11 +17,9 @@ export const metadata: Metadata = {
     "رواتب السعودية", "رواتب مصر", "رواتب الكويت", "رواتب الإمارات", "رواتب الأردن"
   ],
   authors: [{ name: 'مفيد - Mofeed' }],
-  // --- إضافة كود التحقق هنا ---
   verification: {
-    google: 'google-site-verification: google83effd278acafafb.html', // ضع الرمز الموجود في ملفك الـ html هنا فقط
+    google: 'ITVUAwRB8nkd8PrPKjnfbbcobFZwve56eN9Qs4Gq-nA', 
   },
-  // -------------------------
   icons: {
     icon: '/icon.svg?v=1',
     apple: '/icon.svg?v=1',
