@@ -5,7 +5,7 @@ export const PrayerMainLayout = ({ children }: { children: React.ReactNode }) =>
       <footer className="pt-12 text-center">
         <div className="inline-block w-12 h-[1px] bg-[#F3EFE0] mb-4" />
         <p className="text-[#CDC8B8] text-[10px] tracking-[0.4em] uppercase font-bold">
-          Luxuriously Crafted • Precision Timing
+         •تقبل اللله صالح أعمالكم • 
         </p>
       </footer>
     </div>
