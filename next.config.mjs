@@ -1,21 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  images: {
-    unoptimized: true,
-  },
-  async headers() {
+  async rewrites() {
     return [
       {
         source: '/sitemap.xml',
-        headers: [
-          {
-            key: 'Content-Type',
-            value: 'application/xml; charset=utf-8',
-          },
-        ],
+        destination: '/sitemap.xml/route',
+      },
+      {
+        source: '/robots.txt',
+        destination: '/robots.txt/route', // إذا كنت ستستخدم Route Handler للروبوتس أيضاً
       },
     ];
   },
