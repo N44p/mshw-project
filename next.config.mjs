@@ -1,24 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // منع إضافة "/" تلقائياً التي تكسر روابط الملفات
-  trailingSlash: false,
-  
-  // السماح برفع الموقع حتى لو وجد أخطاء بسيطة
-  typescript: { ignoreBuildErrors: true },
-  eslint: { ignoreDuringBuilds: true },
-  
-  images: { unoptimized: true },
-
-  // إجبار النظام على قراءة الملفات من مجلد public مباشرة
+  // حذفنا قسم eslint لأنه يسبب الخطأ الذي رأيته
+  typescript: { 
+    ignoreBuildErrors: true 
+  },
+  images: { 
+    unoptimized: true 
+  },
+  // هذا التوجيه هو الذي سينهي مشكلة "الصفحة السوداء" للخريطة
   async rewrites() {
     return [
       {
-        source: '/robots.txt',
-        destination: '/robots.txt',
-      },
-      {
         source: '/sitemap.xml',
-        destination: '/mysitemap.xml',
+        destination: '/mysitemap.xml', // تأكد أن هذا الملف موجود في مجلد public
       },
     ];
   },
