@@ -2,31 +2,33 @@ import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://mofed.vercel.app'
-  const tools = [
+  
+  // هذه هي المسارات من ملف page.tsx الخاص بك
+  const routes = [
     '',
-    '/athkar',
-    '/calendar-display',
-    '/calories-calculator',
-    '/currency-converter',
     '/date-converter',
-    '/document-scanner',
-    '/end-of-service',
-    '/internet-speed',
-    '/national-events',
-    '/password-generator',
-    '/prayer-times',
-    '/qr-tool',
     '/salary-dates',
-    '/size-converter',
-    '/tasks',
-    '/unit-converter',
+    '/calendar-display',
+    '/prayer-times',
+    '/internet-speed',
+    '/athkar',
+    '/currency-converter',
+    '/calories-calculator',
     '/vat-calculator',
+    '/size-converter',
+    '/password-generator',
+    '/unit-converter',
+    '/document-scanner',
+    '/qr-tool',
+    '/end-of-service',
+    '/tasks',
+    '/national-events',
   ]
 
-  return tools.map((tool) => ({
-    url: `${baseUrl}${tool}`,
+  return routes.map((route) => ({
+    url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: 'daily',
-    priority: tool === '' ? 1 : 0.8,
+    priority: route === '' ? 1 : 0.8,
   }))
 }
