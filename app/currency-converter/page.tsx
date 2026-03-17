@@ -10,11 +10,10 @@ import { Coins, Loader2, ArrowLeftRight } from "lucide-react"
 export default function CurrencyConverterPage() {
   const [amount, setAmount] = useState<string>("100")
   const [fromCurrency, setFromCurrency] = useState("USD")
-  const [toCurrency, setToCurrency] = useState("EGP") // جعلنا الجنيه المصري هو الهدف الافتراضي
+  const [toCurrency, setToCurrency] = useState("EGP")
   const [rates, setRates] = useState<any>({})
   const [loading, setLoading] = useState(true)
 
-  // جلب الأسعار الحقيقية من API مجاني
   useEffect(() => {
     const fetchRates = async () => {
       try {
@@ -25,8 +24,7 @@ export default function CurrencyConverterPage() {
         setLoading(false)
       } catch (error) {
         console.error("خطأ في جلب الأسعار")
-        // وضع أسعار احتياطية في حال انقطاع الإنترنت
-        setRates({ USD: 1, EGP: 51, SAR: 3.75, AED: 3.67 })
+        setRates({ USD: 1, EGP: 51, SAR: 3.75, AED: 3.67, KWD: 0.31, QAR: 3.64, JOD: 0.71, BHD: 0.38, OMR: 0.38 })
         setLoading(false)
       }
     }
@@ -39,6 +37,25 @@ export default function CurrencyConverterPage() {
     const result = (num / rates[fromCurrency]) * rates[toCurrency]
     return result.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   }
+
+  // مصفوفة العملات لتسهيل عرضها في القائمة
+  const currencyList = [
+    { code: "USD", name: "USD - دولار أمريكي" },
+    { code: "SAR", name: "SAR - ريال سعودي" },
+    { code: "EGP", name: "EGP - جنيه مصري" },
+    { code: "AED", name: "AED - درهم إماراتي" },
+    { code: "KWD", name: "KWD - دينار كويتي" },
+    { code: "QAR", name: "QAR - ريال قطري" },
+    { code: "JOD", name: "JOD - دينار أردني" },
+    { code: "BHD", name: "BHD - دينار بحريني" },
+    { code: "OMR", name: "OMR - ريال عماني" },
+    { code: "EUR", name: "EUR - يورو أوروبي" },
+    { code: "GBP", name: "GBP - جنيه إسترليني" },
+    { code: "TRY", name: "TRY - ليرة تركية" },
+    { code: "DZD", name: "DZD - دينار جزائري" },
+    { code: "MAD", name: "MAD - درهم مغربي" },
+    { code: "LYD", name: "LYD - دينار ليبي" },
+  ]
 
   if (loading) return (
     <DashboardLayout title="محول العملات" description="جاري جلب أسعار الصرف الحية...">
@@ -69,9 +86,9 @@ export default function CurrencyConverterPage() {
               <Select value={fromCurrency} onValueChange={setFromCurrency}>
                 <SelectTrigger className="h-12"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="USD">USD - دولار</SelectItem>
-                  <SelectItem value="SAR">SAR - ريال</SelectItem>
-                  <SelectItem value="EGP">EGP - جنيه</SelectItem>
+                  {currencyList.map((c) => (
+                    <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
 
@@ -80,9 +97,9 @@ export default function CurrencyConverterPage() {
               <Select value={toCurrency} onValueChange={setToCurrency}>
                 <SelectTrigger className="h-12"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="EGP">EGP - جنيه</SelectItem>
-                  <SelectItem value="SAR">SAR - ريال</SelectItem>
-                  <SelectItem value="USD">USD - دولار</SelectItem>
+                  {currencyList.map((c) => (
+                    <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

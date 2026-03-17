@@ -6,7 +6,7 @@ const HeroClock = ({ name, countdown, time }: any) => (
     
     <div className="space-y-6">
       <p className="text-[#A69D85] text-sm font-bold tracking-[0.3em] uppercase">الصلاة القادمة</p>
-      <h2 className="text-7xl md:text-8xl font-serif font-black text-[#5C5447] tracking-tighter italic">
+      <h2 className="text-8xl font-bold text-[#5C5447] font-sans">
         {name || "..."}
       </h2>
       <div className="text-5xl font-mono font-extralight text-[#B8860B] drop-shadow-sm transition-all">
